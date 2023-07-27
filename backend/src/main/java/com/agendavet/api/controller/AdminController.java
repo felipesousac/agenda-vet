@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -22,13 +24,25 @@ public class AdminController {
 
     @PostMapping
     @Transactional
-    public void register(@RequestBody @Valid AdminRegisterData data) {
+    public ResponseEntity register(@RequestBody @Valid AdminRegisterData data, UriComponentsBuilder uriBuilder) {
+        var admin = new Admin(data);
+        repository.save(admin);
 
-        repository.save(new Admin(data));
+        var uri = uriBuilder.path("/admin/{id}").buildAndExpand(admin.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new AdminListData(admin));
     }
 
     @GetMapping
-    public Page<AdminListData> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pagination) {
-        return repository.findAll(pagination).map(AdminListData::new);
+    public ResponseEntity<Page<AdminListData>> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pagination) {
+        var page = repository.findAll(pagination).map(AdminListData::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detail(@PathVariable Long id) {
+        var admin = repository.getReferenceById(id);
+
+        return ResponseEntity.ok(new AdminListData(admin));
     }
 }
