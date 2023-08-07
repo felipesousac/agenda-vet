@@ -1,9 +1,6 @@
 package com.agendavet.api.controller;
 
-import com.agendavet.api.domain.admin.Admin;
-import com.agendavet.api.domain.admin.AdminListData;
-import com.agendavet.api.domain.admin.AdminRegisterData;
-import com.agendavet.api.domain.admin.AdminRepository;
+import com.agendavet.api.domain.admin.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,5 +41,22 @@ public class AdminController {
         var admin = repository.getReferenceById(id);
 
         return ResponseEntity.ok(new AdminListData(admin));
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity update(@RequestBody @Valid AdminUpdateData data) {
+        var admin = repository.getReferenceById(data.id());
+        admin.updateData(data);
+
+        return ResponseEntity.ok(new AdminListData(admin));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id) {
+        repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

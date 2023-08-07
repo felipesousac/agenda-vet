@@ -33,4 +33,18 @@ public class Admin {
         this.issuperadmin = data.issuperadmin();
     }
 
+    public void updateData(AdminUpdateData data) {
+        if (data.name() != null) {
+            this.name = data.name();
+        }
+
+        if (data.username() != null) {
+            this.username = data.username();
+        }
+
+        if (data.issuperadmin() != null) {
+            this.issuperadmin = data.issuperadmin();
+        }
+
+    }
 }
