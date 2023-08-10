@@ -1,6 +1,7 @@
 package com.agendavet.api.controller;
 
 import com.agendavet.api.domain.admin.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@SecurityRequirement(name = "bearer-key")
 public class AdminController {
     @Autowired
     private AdminRepository repository;
