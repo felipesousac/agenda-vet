@@ -34,6 +34,7 @@ API REST que permite o gerenciamento de administradores de um sistema veterinár
 - Spring Security
 - Auth0 / JWT
 - Maven
+- Swagger
 
 # Como executar o projeto
 
