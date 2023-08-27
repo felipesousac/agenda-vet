@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Table(name = "administrators")
 @Entity(name = "Admin")
@@ -29,7 +30,7 @@ public class Admin {
     public Admin(AdminRegisterData data) {
         this.name = data.name();
         this.username = data.username();
-        this.password = data.password();
+        this.password = BCrypt.hashpw(data.password(), BCrypt.gensalt(10));
         this.issuperadmin = data.issuperadmin();
     }
 
